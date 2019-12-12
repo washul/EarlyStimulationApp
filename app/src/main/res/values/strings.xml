@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">EarlyStimulationApp</string>
+
+    <string name="crawling">Crawling</string>
+    <string name="activity">Activity</string>
+    <string name="articles">Articles</string>
+</resources>
