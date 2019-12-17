@@ -13,7 +13,7 @@ import wsl.com.earlystimulationapp.Utils.getFragmentsToViewPager
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var dataViewModel: DataViewModel
+    internal lateinit var dataViewModel: DataViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,17 +25,14 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    //TODO: Hay una fuga de memoria en el CPU de 2 megas rastrear esa fuga
+
     inner class InitUI: Thread(){
 
         override fun run() {
             super.run()
 
             dataViewModel = ViewModelProviders.of( this@MainActivity ).get( DataViewModel::class.java )
-            dataViewModel.downloadActivities {
-
-                Log.e(wsl.com.earlystimulationapp.Utils.TAG, it.toString() )
-
-            }
 
             supportActionBar?.title = getString(R.string.crawling)
 

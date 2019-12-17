@@ -4,4 +4,6 @@
     <string name="crawling">Crawling</string>
     <string name="activity">Activity</string>
     <string name="articles">Articles</string>
+    <string name="titulo">titulo</string>
+    <string name="subtitulo">subtitulo</string>
 </resources>

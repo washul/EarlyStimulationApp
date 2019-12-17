@@ -8,10 +8,8 @@ import okhttp3.*
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
-import wsl.com.earlystimulationapp.Utils.BABY_ID
-import wsl.com.earlystimulationapp.Utils.SKILL_ID
-import wsl.com.earlystimulationapp.Utils.TOKEN
-import wsl.com.earlystimulationapp.Utils.URL_BASE
+import wsl.com.earlystimulationapp.Utils.*
+import kotlin.coroutines.coroutineContext
 
 object RetrofitClient {
 
@@ -59,7 +57,7 @@ private class RequestInterceptorSetJsonModel : Interceptor {
         body.close()
 
         val newResponse = response.newBuilder()
-            .body(ResponseBody.create(JSON, ( apiResponse.activities ).toString()))
+            .body( ResponseBody.create(JSON, ( apiResponse.activities ?: apiResponse.articles ).toString()))
 
         return newResponse.build()
     }
@@ -97,7 +95,8 @@ data class ApiResponseModel(
     val id: Int?,
     val name: String,
     val type: String?,
-    val activities: JsonArray,
+    val activities: JsonArray?,
+    val articles: JsonArray?,
     val meta: JsonObject
 
 )

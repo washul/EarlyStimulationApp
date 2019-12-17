@@ -9,3 +9,4 @@ const val TOKEN = "Token token=5105f4358e45f6f98057a654c882b7742c3ac5241c81a706a
 
 
 const val TABLE_NAME_ACTIVITY = "activity"
+const val TABLE_NAME_ARTICLE = "article"

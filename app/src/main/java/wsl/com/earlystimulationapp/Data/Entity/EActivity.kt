@@ -1,13 +1,7 @@
-package wsl.com.earlystimulationapp.Data.Room.Entity
+package wsl.com.earlystimulationapp.Data.Entity
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-import wsl.com.earlystimulationapp.Utils.TABLE_NAME_ACTIVITY
-
-@Entity(tableName = TABLE_NAME_ACTIVITY)
 data class EActivity(
 
-    @PrimaryKey(autoGenerate = false)
     val id: Int,
     val name: String?,
     val age: Int,
