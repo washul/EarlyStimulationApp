@@ -2,7 +2,8 @@ package wsl.com.earlystimulationapp
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import android.widget.ArrayAdapter
+import android.widget.Spinner
 import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
@@ -38,6 +39,8 @@ class MainActivity : AppCompatActivity() {
 
             initViewPager()
 
+            initSpinner()
+
         }
 
         private fun initViewPager(){
@@ -51,6 +54,14 @@ class MainActivity : AppCompatActivity() {
             viewPager.addOnPageChangeListener(
                 TabLayout.TabLayoutOnPageChangeListener(tabLayour))
 
+
+        }
+
+        private fun initSpinner(){
+
+            val adapter = ArrayAdapter<String>( applicationContext, R.layout.spinner_item, resources.getStringArray( R.array.months ) )
+            val spinner = findViewById<Spinner>( R.id._months_selector )
+            spinner.adapter = adapter
 
         }
 

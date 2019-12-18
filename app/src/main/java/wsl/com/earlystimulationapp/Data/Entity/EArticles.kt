@@ -1,6 +1,6 @@
 package wsl.com.earlystimulationapp.Data.Entity
 
-data class EArticle(
+data class EArticles(
 
     val id: String,
     val type: String?,
@@ -10,5 +10,17 @@ data class EArticle(
     val picture: String?,
     val area_id: Int?,
     val short_description: String?
+
+)
+
+data class EArticle(
+
+    val id: Int,
+    val title: String?,
+    val picture: String?,
+    val link: String?,
+    val area_id: Int?,
+    val body: String?,
+    val faved: Boolean?
 
 )

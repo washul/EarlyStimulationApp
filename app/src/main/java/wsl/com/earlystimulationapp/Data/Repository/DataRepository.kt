@@ -7,9 +7,9 @@ import com.google.gson.reflect.TypeToken
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import okhttp3.MediaType
 import wsl.com.earlystimulationapp.Data.Entity.EActivity
 import wsl.com.earlystimulationapp.Data.Entity.EArticle
+import wsl.com.earlystimulationapp.Data.Entity.EArticles
 import wsl.com.earlystimulationapp.Utils.Prefs
 import wsl.com.earlystimulationapp.Utils.Retrofit.RetrofitClient
 import wsl.com.earlystimulationapp.Utils.Retrofit.ServicesData
@@ -79,7 +79,7 @@ class DataRepository( context: Context ) {
     /**
      * ARTICLES
      * */
-    fun downloadArticles(function: (List<EArticle>?) -> Unit) {
+    fun downloadArticles(function: (List<EArticles>?) -> Unit) {
 
         try {
 
@@ -110,19 +110,48 @@ class DataRepository( context: Context ) {
 
     }
 
-    fun getCacheArticles(): List<EArticle> {
+    fun downloadArticleDetail( articleID: String, function: ( EArticle? ) -> Unit ) {
+
+        try {
+
+            compositeDisposable.add(service.getArticleDetail( "articles/${articleID}" ).subscribeOn( Schedulers.io() )
+                .unsubscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ articleDetail ->
+
+                    Log.e("WSL", articleDetail.toString())
+
+                    function(articleDetail)
+
+                },
+                    {
+                        it.printStackTrace()
+                        function(null)
+                    }
+                )
+
+            )
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+            function(null)
+        }
+
+    }
+
+    fun getCacheArticles(): List<EArticles> {
 
         val jsonString = preferences.articleListCache!!
 
         if ( jsonString == "" )
             return emptyList()
 
-        val listType: Type = object : TypeToken<ArrayList<EArticle>>() {}.type
+        val listType: Type = object : TypeToken<ArrayList<EArticles>>() {}.type
         return GSON.fromJson(jsonString, listType)
 
     }
 
-    fun setCacheArticles( list: List<EArticle> ) {
+    fun setCacheArticles( list: List<EArticles> ) {
 
         val jsonString = GSON.toJson( list )
         preferences.articleListCache = jsonString

@@ -12,11 +12,11 @@
         android:id = "@+id/appbar"
         android:layout_width = "match_parent"
         android:layout_height = "wrap_content"
-        android:theme = "@style/AppTheme.AppBarOverlay" >
+        >
 
         <androidx.appcompat.widget.Toolbar
             android:id = "@+id/toolbar"
-            app:titleTextColor="@color/colorBlack"
+            app:titleTextColor="@color/colorWhite"
             android:gravity = "center"
             android:layout_width = "match_parent"
             android:layout_height = "?attr/actionBarSize"
@@ -25,9 +25,20 @@
             app:popupTheme = "@style/AppTheme.PopupOverlay"
             tools:targetApi = "lollipop" />
 
+        <Spinner
+            android:id="@+id/_months_selector"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center"
+            android:layout_height="?attr/actionBarSize"
+            android:entries="@array/months"
+            android:textAlignment="center"
+            android:backgroundTint="@color/colorWhite"
+            android:popupBackground="@drawable/background_list_spinner"
+            tools:targetApi="lollipop" />
+
         <com.google.android.material.tabs.TabLayout
             android:id = "@+id/tabs"
-            app:tabTextColor = "@color/colorBlack"
+            app:tabTextColor = "@color/colorWhite"
             app:tabSelectedTextColor = "@color/colorAccent"
             app:tabIndicatorHeight = "2.5dp"
             app:tabMode = "fixed"

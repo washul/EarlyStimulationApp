@@ -3,19 +3,18 @@ package wsl.com.earlystimulationapp.Fragments
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.lifecycle.Observer
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.squareup.picasso.Picasso
-import wsl.com.earlystimulationapp.Data.Entity.EArticle
+import wsl.com.earlystimulationapp.Data.Entity.EArticles
 import wsl.com.earlystimulationapp.MainActivity
 
 import wsl.com.earlystimulationapp.R
@@ -57,9 +56,29 @@ class ArticlesFragment : Fragment() {
 
         }
 
-        private fun initRecycler( list: List<EArticle>) {
+        private fun initRecycler( list: List<EArticles>) {
 
-            adapterArticles = AdapterArticles( list, context!!)
+            val delegate = object : (EArticles) -> Unit {
+
+                override fun invoke( articleSelected: EArticles ) {
+
+                    dataViewModel.downloadArticleDetail( articleSelected.id ){
+
+                        if ( it == null ){
+                            Toast.makeText( context!!, "No se a podido abrir la informacion", Toast.LENGTH_LONG ).show()
+                            return@downloadArticleDetail
+                        }
+
+                        val ft = childFragmentManager.beginTransaction()
+                        ArticleDetailFragment().show( ft, ArticleDetailFragment.TAG )
+
+                    }
+
+                }
+
+            }
+
+            adapterArticles = AdapterArticles( list, context!!, delegate )
 
             val recyclerView = uIView.findViewById<RecyclerView>(R.id._recycler_articles)
             recyclerView.apply {
@@ -98,7 +117,7 @@ class ArticlesFragment : Fragment() {
 
 }
 
-class AdapterArticles(private var list: List<EArticle>, private val context: Context) : RecyclerView.Adapter<AdapterArticles.MyViewHolder>() {
+class AdapterArticles( private var list: List<EArticles>, private val context: Context, private val function: ( EArticles ) -> Unit ) : RecyclerView.Adapter<AdapterArticles.MyViewHolder>() {
 
     private val picasso = Picasso.with( context )
 
@@ -108,7 +127,7 @@ class AdapterArticles(private var list: List<EArticle>, private val context: Con
         val title       = view.findViewById<TextView>( R.id._title_activity )
         val subtitle    = view.findViewById<TextView>( R.id._subtitle_activity )
 
-        fun bind(item: EArticle){
+        fun bind(item: EArticles){
 
             title.text      = item.name
             subtitle.text   = item.short_description
@@ -120,7 +139,7 @@ class AdapterArticles(private var list: List<EArticle>, private val context: Con
 
             image.setOnClickListener {
 
-
+                function( item )
 
             }
 
@@ -130,7 +149,7 @@ class AdapterArticles(private var list: List<EArticle>, private val context: Con
 
     }
 
-    fun updateList( itemList: List<EArticle> ){
+    fun updateList( itemList: List<EArticles> ){
         this.list = itemList
         notifyDataSetChanged()
 

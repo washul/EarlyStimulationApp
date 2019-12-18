@@ -1,8 +1,10 @@
 package wsl.com.earlystimulationapp.Utils
 
 import android.app.Activity
+import androidx.fragment.app.Fragment
 import wsl.com.earlystimulationapp.Fragments.ActivitiesFragment
 import wsl.com.earlystimulationapp.Fragments.ArticlesFragment
+import wsl.com.earlystimulationapp.MainActivity
 import wsl.com.earlystimulationapp.R
 
 fun Activity.getFragmentsToViewPager(): List<ModelFragment> {

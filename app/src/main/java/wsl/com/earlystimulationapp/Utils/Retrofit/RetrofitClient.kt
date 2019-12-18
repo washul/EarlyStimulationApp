@@ -1,5 +1,6 @@
 package wsl.com.earlystimulationapp.Utils.Retrofit
 
+import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
@@ -41,29 +42,6 @@ object RetrofitClient {
 
 }
 
-private class RequestInterceptorSetJsonModel : Interceptor {
-
-    val JSON = MediaType.parse("application/json; charset=utf-8")
-    val GSON = Gson()
-
-    override fun intercept(chain: Interceptor.Chain): Response {
-        val request: Request = chain.request()
-        val response = chain.proceed(request)
-        val body = response.body()
-
-        val data = GSON.fromJson(body!!.string(), Data::class.java)
-
-        val apiResponse: ApiResponseModel = data.data
-        body.close()
-
-        val newResponse = response.newBuilder()
-            .body( ResponseBody.create(JSON, ( apiResponse.activities ?: apiResponse.articles ).toString()))
-
-        return newResponse.build()
-    }
-
-}
-
 private class RequestInterceptorAddHeaders : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
@@ -86,6 +64,35 @@ private class RequestInterceptorAddHeaders : Interceptor {
 
 }
 
+//TODO: No esta casteando el article para ver el detalle
+
+private class RequestInterceptorSetJsonModel : Interceptor {
+
+    val JSON = MediaType.parse("application/json; charset=utf-8")
+    val GSON = Gson()
+
+    override fun intercept(chain: Interceptor.Chain): Response {
+        val request: Request = chain.request()
+        val response = chain.proceed(request)
+        val body = response.body()
+        val bodyString = body!!.string()
+
+        Log.e(TAG, bodyString )
+
+        val data = GSON.fromJson( bodyString, Data::class.java )
+
+        val apiResponse: ApiResponseModel = data.data
+        body.close()
+
+        val newResponse = response.newBuilder()
+            .body( ResponseBody.create(JSON, ( apiResponse.activities ?: apiResponse.articles ?: apiResponse.article ).toString()))
+
+        return newResponse.build()
+
+    }
+
+}
+
 data class Data(
     val data: ApiResponseModel
 )
@@ -97,6 +104,7 @@ data class ApiResponseModel(
     val type: String?,
     val activities: JsonArray?,
     val articles: JsonArray?,
+    val article: JsonObject?,
     val meta: JsonObject
 
 )

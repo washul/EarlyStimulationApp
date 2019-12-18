@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">EarlyStimulationApp</string>
 
     <string name="crawling">Crawling</string>
@@ -6,4 +6,27 @@
     <string name="articles">Articles</string>
     <string name="titulo">titulo</string>
     <string name="subtitulo">subtitulo</string>
+    <string name="no_se_a_podido_descargar">No se a podido actualizar la lista.</string>
+
+
+    <string-array name="months">
+        <item>ALL MONTHS</item>
+        <item tools:ignore="TypographyDashes">0-1 MONTH</item>
+        <item>2 MONTHS</item>
+        <item>3 MONTHS</item>
+        <item>4 MONTHS</item>
+        <item>5 MONTHS</item>
+        <item>6 MONTHS</item>
+        <item>7 MONTHS</item>
+        <item>8 MONTHS</item>
+        <item>9 MONTHS</item>
+        <item>10 MONTHS</item>
+        <item>11 MONTHS</item>
+        <item>12 MONTHS</item>
+        <item>13 MONTHS</item>
+        <item>14 MONTHS</item>
+        <item>15 MONTHS</item>
+        <item>16 MONTHS</item>
+    </string-array>
+
 </resources>

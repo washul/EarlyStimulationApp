@@ -7,18 +7,21 @@ import org.jetbrains.anko.runOnUiThread
 import wsl.com.earlystimulationapp.Data.Repository.DataRepository
 import wsl.com.earlystimulationapp.Data.Entity.EActivity
 import wsl.com.earlystimulationapp.Data.Entity.EArticle
+import wsl.com.earlystimulationapp.Data.Entity.EArticles
+import wsl.com.earlystimulationapp.R
 
 class DataViewModel( application: Application ): AndroidViewModel( application ){
 
     private val dataRepository = DataRepository( application.applicationContext )
-    var articlesList: List<EArticle>? = null
+    var articlesList: List<EArticles>? = null
     var activityList: List<EActivity>? = null
+    var articleDetail: EArticle? = null
 
     private fun sendToast(){
 
         getApplication<Application>().runOnUiThread {
 
-            Toast.makeText( applicationContext, "No se a podido actualizar la lista.", Toast.LENGTH_LONG ).show()
+            Toast.makeText( applicationContext, getString(R.string.no_se_a_podido_descargar), Toast.LENGTH_LONG ).show()
 
         }
 
@@ -61,7 +64,7 @@ class DataViewModel( application: Application ): AndroidViewModel( application )
     /**
      * Articles
      * */
-    fun getArticles( function: ( List<EArticle> ) -> Unit ) {
+    fun getArticles( function: ( List<EArticles> ) -> Unit ) {
 
         if ( articlesList == null ){
 
@@ -86,6 +89,17 @@ class DataViewModel( application: Application ): AndroidViewModel( application )
         }else{
 
             function( this.articlesList!! )
+
+        }
+
+    }
+
+    fun downloadArticleDetail( articleID: String, function: ( EArticle? ) -> Unit ) {
+
+        dataRepository.downloadArticleDetail( articleID ){ articleResponse ->
+
+           this.articleDetail = articleResponse
+            function( this.articleDetail )
 
         }
 
