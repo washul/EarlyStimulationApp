@@ -10,7 +10,7 @@ import wsl.com.earlystimulationapp.Data.Entity.EArticles
 interface ServicesData{
 
     @GET("catalogue/activities")
-    fun getActivities(): Observable<List<EActivity>>
+    fun getActivities( @Query("skill_id") skill_id: String ): Observable<List<EActivity>>
 
     @GET("catalogue/articles")
     fun getArticles(): Observable<List<EArticles>>

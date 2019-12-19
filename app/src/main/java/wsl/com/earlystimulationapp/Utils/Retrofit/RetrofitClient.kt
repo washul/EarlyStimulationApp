@@ -49,7 +49,6 @@ private class RequestInterceptorAddHeaders : Interceptor {
         val originalHttpUrl = original.url()
 
         val url = originalHttpUrl.newBuilder()
-            .addQueryParameter("skill_id", SKILL_ID)
             .addQueryParameter("baby_id", BABY_ID)
             .build()
 
@@ -63,8 +62,6 @@ private class RequestInterceptorAddHeaders : Interceptor {
     }
 
 }
-
-//TODO: No esta casteando el article para ver el detalle
 
 private class RequestInterceptorSetJsonModel : Interceptor {
 

@@ -2,8 +2,13 @@ package wsl.com.earlystimulationapp
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.view.View
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import android.widget.TextView
+import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
@@ -11,6 +16,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import wsl.com.earlystimulationapp.Data.ViewModel.DataViewModel
 import wsl.com.earlystimulationapp.Utils.ViewPageAdapter
 import wsl.com.earlystimulationapp.Utils.getFragmentsToViewPager
+import wsl.com.earlystimulationapp.Utils.simulateDownloadListOfMonths
 
 class MainActivity : AppCompatActivity() {
 
@@ -35,11 +41,11 @@ class MainActivity : AppCompatActivity() {
 
             dataViewModel = ViewModelProviders.of( this@MainActivity ).get( DataViewModel::class.java )
 
+            initSpinner()
+
             supportActionBar?.title = getString(R.string.crawling)
 
             initViewPager()
-
-            initSpinner()
 
         }
 
@@ -59,9 +65,28 @@ class MainActivity : AppCompatActivity() {
 
         private fun initSpinner(){
 
-            val adapter = ArrayAdapter<String>( applicationContext, R.layout.spinner_item, resources.getStringArray( R.array.months ) )
+            val itemsList = simulateDownloadListOfMonths()
+
+            val adapter = ArrayAdapter<String>( applicationContext, R.layout.spinner_item, itemsList )
             val spinner = findViewById<Spinner>( R.id._months_selector )
             spinner.adapter = adapter
+
+            spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
+
+                override fun onItemSelected( parent: AdapterView<*>?, view: View?,  position: Int,  id: Long ) {
+
+                    var number = ( view as TextView? )?.text ?: dataViewModel.skill_id
+                    number = number.subSequence( 0, 1 ).toString()
+
+                    if ( !number.isDigitsOnly() )
+                        number = "5" //No encontre como traer todos los meses
+
+                    dataViewModel.skill_id = number
+
+                }
+
+            }
 
         }
 

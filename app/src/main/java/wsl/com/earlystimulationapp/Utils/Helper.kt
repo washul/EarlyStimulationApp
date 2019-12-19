@@ -20,3 +20,19 @@ fun Activity.getFragmentsToViewPager(): List<ModelFragment> {
     )
 
 }
+
+fun simulateDownloadListOfMonths(): ArrayList<String>{
+
+    val list = ArrayList<String>()
+
+    list.add("ALL MONTHS")
+
+    for ( i in 1..54 ){
+
+        list.add("$i MONTHS")
+
+    }
+
+    return list
+
+}

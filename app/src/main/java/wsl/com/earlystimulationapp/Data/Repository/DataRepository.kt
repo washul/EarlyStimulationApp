@@ -25,13 +25,12 @@ class DataRepository( context: Context ) {
     /**
      * ACTIVITY
      * */
-    fun downloadActivities(function: (List<EActivity>?) -> Unit) {
+    fun downloadActivities( skill_id: String,  function: (List<EActivity>?) -> Unit) {
 
         try {
 
-            compositeDisposable.add(service.getActivities().subscribeOn(
-                Schedulers.io()
-            )
+            compositeDisposable
+                .add( service.getActivities( skill_id ).subscribeOn( Schedulers.io() )
                 .unsubscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ list ->

@@ -37,7 +37,7 @@ class ActivitiesFragment : Fragment() {
     inner class InitUI: Thread(){
 
         private val dataViewModel = ( activity!! as MainActivity ).dataViewModel
-        private lateinit var adapterActivities: AdapterActivities
+        private var adapterActivities: AdapterActivities? = null
 
         private val _swipeToRefresh = uIView.findViewById<SwipeRefreshLayout>( R.id._swipetorefresh )
 
@@ -45,18 +45,23 @@ class ActivitiesFragment : Fragment() {
             super.run()
 
             _swipeToRefresh.isRefreshing = true
+            initRecycler()
 
-            dataViewModel.getActivities { responseList ->
+            dataViewModel.activityListLiveData.observe( this@ActivitiesFragment, Observer { responseList ->
 
-                initRecycler( responseList )
+                if ( adapterActivities == null )
+                    return@Observer
 
-            }
+                adapterActivities?.updateList( responseList )
+                _swipeToRefresh.isRefreshing = false
+
+            })
 
         }
 
-        private fun initRecycler( list: List<EActivity> ){
+        private fun initRecycler(){
 
-            adapterActivities = AdapterActivities( list, context!! )
+            adapterActivities = AdapterActivities( emptyList(), context!! )
 
             val recyclerView = uIView.findViewById<RecyclerView>( R.id._recycler_activities )
             recyclerView.apply {
@@ -74,18 +79,12 @@ class ActivitiesFragment : Fragment() {
 
             }
 
-            _swipeToRefresh.isRefreshing = false
-
         }
 
-        private fun downloadActivities(){
+        private fun downloadActivities() {
 
-            dataViewModel.getActivities { list ->
-
-                adapterActivities.updateList( list )
-                _swipeToRefresh.isRefreshing = false
-
-            }
+            _swipeToRefresh.isRefreshing = true
+            dataViewModel.getActivities()
 
         }
 

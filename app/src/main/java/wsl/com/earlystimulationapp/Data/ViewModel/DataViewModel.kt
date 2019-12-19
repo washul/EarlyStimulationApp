@@ -3,6 +3,9 @@ package wsl.com.earlystimulationapp.Data.ViewModel
 import android.app.Application
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import org.jetbrains.anko.runOnUiThread
 import wsl.com.earlystimulationapp.Data.Repository.DataRepository
 import wsl.com.earlystimulationapp.Data.Entity.EActivity
@@ -13,6 +16,15 @@ import wsl.com.earlystimulationapp.R
 class DataViewModel( application: Application ): AndroidViewModel( application ){
 
     private val dataRepository = DataRepository( application.applicationContext )
+
+    var skill_id: String = "5"
+        set(value) {
+            getActivities()
+            field = value
+        }
+    val activityListLiveData = MutableLiveData<List<EActivity>>()
+
+
     var articlesList: List<EArticles>? = null
     var activityList: List<EActivity>? = null
     var articleDetail: EArticle? = null
@@ -30,31 +42,23 @@ class DataViewModel( application: Application ): AndroidViewModel( application )
     /**
      * Activities
      * */
-    fun getActivities( function: ( List<EActivity> ) -> Unit ) {
+    fun getActivities() {
 
-        if ( activityList == null ){
+        dataRepository.downloadActivities( this.skill_id ){ responseList ->
 
-            dataRepository.downloadActivities{ responseList ->
+            if ( responseList == null ){
 
-                if ( responseList == null ){
+                this.activityList = dataRepository.getCacheActivities()
+                sendToast()
 
-                    this.activityList = dataRepository.getCacheActivities()
-                    sendToast()
+            }else{
 
-                }else{
-
-                    this.activityList = responseList
-                    dataRepository.setCacheActivities( responseList )
-
-                }
-
-                function( this.activityList!! )
+                this.activityList = responseList
+                dataRepository.setCacheActivities( responseList )
 
             }
 
-        }else{
-
-            function( this.activityList!! )
+            this.activityListLiveData.postValue( responseList )
 
         }
 
